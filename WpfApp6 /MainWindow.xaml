@@ -18,6 +18,7 @@
 
 
         <Button x:Name="Maxwell" Content="Maxwell" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" Width="150" Height="150" RenderTransformOrigin="0,1" Click="Cookie_Click">
+        <Image VerticalAlignment="Center" HorizontalAlignment="Center" Width="210" Height="210" Source="pictures/Maxwell.png"></Image>
             <Button.Resources>
                 <Style TargetType="Border">
                     <Setter Property="CornerRadius" Value="200"/>
