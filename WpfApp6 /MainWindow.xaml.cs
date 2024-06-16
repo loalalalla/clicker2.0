@@ -1,162 +1,145 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Threading;
-using System.IO;
-
-namespace WPF_Cookie_Clicker
+namespace _4040;
+public partial class MainWindow
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : Window
+    public double PawsPerClick = 1;
+    public double PawsPerSecond;
+    public double TotalPaws;
+
+    public double PawsPrice = 15;
+    public double SlumberPrice = 100;
+    public double SweetestHomePrice = 1000;
+
+    public double[] PawsPs = { 0.1, 1, 10};
+    public double[] MachinesBought = { 0, 0, 0,};
+    public MainWindow()
     {
-        public double CookiesPerClick = 1;
-        public double CookiesPerSecond;
-        public double TotalCookies;
+        InitializeComponent();
+        Thread thread = new Thread(Paws);
+        thread.SetApartmentState(ApartmentState.STA);
+        SaveLoad();
+        thread.Start();
+    }
 
-        public double ClickPrice = 15;
-        public double GrandmaPrice = 100;
-        public double FactoryPrice = 1000;
-
-        public double[] CookiesPs = { 0.1, 1, 10};
-        public double[] MachinesBought = { 0, 0, 0,};
-        public MainWindow()
+    private void SaveLoad()
+    {
+        if (File.Exists("../Save.txt"))
         {
-            InitializeComponent();
-            Thread thread = new Thread(Cookies);
-            thread.SetApartmentState(ApartmentState.STA);
-            SaveLoad();
-            thread.Start();
+            TotalPaws = double.Parse(File.ReadLines("../Save.txt").ElementAtOrDefault(0));
+            MachinesBought[0] = double.Parse(File.ReadLines("../Save.txt").ElementAtOrDefault(1));
+            MachinesBought[1] = double.Parse(File.ReadLines("../Save.txt").ElementAtOrDefault(2));
+            MachinesBought[2] = double.Parse(File.ReadLines("../Save.txt").ElementAtOrDefault(3));
+            ClickPrice = double.Parse(File.ReadLines("../Save.txt").ElementAtOrDefault(4));
+            SlumberPrice = double.Parse(File.ReadLines("../Save.txt").ElementAtOrDefault(5));
+            SweetestHomePrice = double.Parse(File.ReadLines("../Save.txt").ElementAtOrDefault(6));
+            txtPaws.Text = Convert.ToString(Convert.ToInt32(ClickPrice));
+            txtSlumber.Text = Convert.ToString(Convert.ToInt32(SlumberPrice));
+            txtSweetestHome.Text = Convert.ToString(Convert.ToInt32(SweetestHomePrice));
         }
+    }
 
-        private void SaveLoad()
+    public double ClickPrice { get; set; }
+
+    private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+        string[] Data = { txtPaws.Text, MachinesBought[0].ToString(), MachinesBought[1].ToString(), MachinesBought[2].ToString(), txtPaws.Text, txtSlumber.Text, txtSweetestHome.Text };
+        File.WriteAllLines("../Save.txt", Data);
+    }
+
+    private void Paws()
+    {
+        while (true)
         {
-            if (File.Exists("../Save.txt"))
+
+            Thread.Sleep(100);
+
+
+            this.Dispatcher.BeginInvoke(new Action(() =>
             {
-               TotalCookies = double.Parse(File.ReadLines("../Save.txt").ElementAtOrDefault(0));
-               MachinesBought[0] = double.Parse(File.ReadLines("../Save.txt").ElementAtOrDefault(1));
-               MachinesBought[1] = double.Parse(File.ReadLines("../Save.txt").ElementAtOrDefault(2));
-               MachinesBought[2] = double.Parse(File.ReadLines("../Save.txt").ElementAtOrDefault(3));
-               ClickPrice = double.Parse(File.ReadLines("../Save.txt").ElementAtOrDefault(4));
-               GrandmaPrice = double.Parse(File.ReadLines("../Save.txt").ElementAtOrDefault(5));
-               FactoryPrice = double.Parse(File.ReadLines("../Save.txt").ElementAtOrDefault(6));
-               txtPaws.Text = Convert.ToString(Convert.ToInt32(ClickPrice));
-               txtSlumber.Text = Convert.ToString(Convert.ToInt32(GrandmaPrice));
-               txtSweetestHome.Text = Convert.ToString(Convert.ToInt32(FactoryPrice));
-            }
-        }
+                PawsPerSecond = PawsPs[0] * MachinesBought[0] + PawsPs[1] * MachinesBought[1] + PawsPs[2] * MachinesBought[2];
+                TotalPaws += PawsPerSecond/10;
+                txtPawsPs.Text = Convert.ToString(PawsPerSecond);
+                txtTotalCookies.Text = Convert.ToString(Convert.ToInt32(TotalPaws));
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            string[] Data = { txtTotalCookies.Text, MachinesBought[0].ToString(), MachinesBought[1].ToString(), MachinesBought[2].ToString(), txtPaws.Text, txtSlumber.Text, txtSweetestHome.Text };
-            File.WriteAllLines("../Save.txt", Data);
-        }
-
-        private void Cookies()
-        {
-            while (true)
-            {
-
-                Thread.Sleep(100);
-
-
-                this.Dispatcher.BeginInvoke(new Action(() =>
+                if (TotalPaws >= ClickPrice)
                 {
-                    CookiesPerSecond = CookiesPs[0] * MachinesBought[0] + CookiesPs[1] * MachinesBought[1] + CookiesPs[2] * MachinesBought[2];
-                    TotalCookies += CookiesPerSecond/10;
-                    txtPawsPs.Text = Convert.ToString(CookiesPerSecond);
-                    txtTotalCookies.Text = Convert.ToString(Convert.ToInt32(TotalCookies));
+                    btnPaws.IsEnabled = true;
+                } else
+                {
+                    btnPaws.IsEnabled = false;
+                }
 
-                    if (TotalCookies >= ClickPrice)
-                    {
-                        btnPaws.IsEnabled = true;
-                    } else
-                    {
-                        btnPaws.IsEnabled = false;
-                    }
-
-                    if (TotalCookies >= GrandmaPrice)
-                    {
-                        btnSlumber.IsEnabled = true;
-                    }
-                    else
-                    {
-                        btnSlumber.IsEnabled = false;
-                    }
-                    if (TotalCookies >= FactoryPrice)
-                    {
-                        btnSweetestHome.IsEnabled = true;
-                    }
-                    else
-                    {
-                        btnSweetestHome.IsEnabled = false;
-                    }
-                }));
-            }
+                if (TotalPaws >= SlumberPrice)
+                {
+                    btnSlumber.IsEnabled = true;
+                }
+                else
+                {
+                    btnSlumber.IsEnabled = false;
+                }
+                if (TotalPaws >= SweetestHomePrice)
+                {
+                    btnSweetestHome.IsEnabled = true;
+                }
+                else
+                {
+                    btnSweetestHome.IsEnabled = false;
+                }
+            }));
         }
+    }
 
-        private void Cookie_Click(object sender, RoutedEventArgs e)
+    private void Cookie_Click(object sender, RoutedEventArgs e)
+    {
+        TotalPaws = TotalPaws + PawsPerClick;
+    }
+
+    private void btnClick_Click(object sender, RoutedEventArgs e)
+    {
+        if (TotalPaws >= ClickPrice)
         {
-            TotalCookies = TotalCookies + CookiesPerClick;
+            MachinesBought[0] = MachinesBought[0] + 1;
+            TotalPaws = TotalPaws - ClickPrice;
+            double Price = ClickPrice * 20 / 100;
+            ClickPrice = ClickPrice + Price;
+            txtPaws.Text = Convert.ToString(Convert.ToInt32(ClickPrice));
         }
+    }
 
-        private void btnClick_Click(object sender, RoutedEventArgs e)
+    private void btnGrandma_Click(object sender, RoutedEventArgs e)
+    {
+        if (TotalPaws >= SlumberPrice)
         {
-            if (TotalCookies >= ClickPrice)
-            {
-                MachinesBought[0] = MachinesBought[0] + 1;
-                TotalCookies = TotalCookies - ClickPrice;
-                double Price = ClickPrice * 20 / 100;
-                ClickPrice = ClickPrice + Price;
-                txtPaws.Text = Convert.ToString(Convert.ToInt32(ClickPrice));
-            }
+            MachinesBought[1] = MachinesBought[1] + 1;
+            TotalPaws = TotalPaws - SlumberPrice;
+            double Price = SlumberPrice * 15 / 100;
+            SlumberPrice = SlumberPrice + Price;
+            txtSlumber.Text = Convert.ToString(Convert.ToInt32(SlumberPrice));
         }
+    }
 
-        private void btnGrandma_Click(object sender, RoutedEventArgs e)
+    private void btnFactory_Click(object sender, RoutedEventArgs e)
+    {
+        if (TotalPaws >= SlumberPrice)
         {
-            if (TotalCookies >= GrandmaPrice)
-            {
-                MachinesBought[1] = MachinesBought[1] + 1;
-                TotalCookies = TotalCookies - GrandmaPrice;
-                double Price = GrandmaPrice * 15 / 100;
-                GrandmaPrice = GrandmaPrice + Price;
-                txtSlumber.Text = Convert.ToString(Convert.ToInt32(GrandmaPrice));
-            }
+            MachinesBought[2] = MachinesBought[2] + 1;
+            TotalPaws = TotalPaws - SweetestHomePrice;
+            double Price = SweetestHomePrice * 15 / 100;
+            SweetestHomePrice = SweetestHomePrice + Price;
+            txtSweetestHome.Text = Convert.ToString(Convert.ToInt32(SweetestHomePrice));
         }
+    }
 
-        private void btnFactory_Click(object sender, RoutedEventArgs e)
+    private void btnUpgrade1_Click(object sender, RoutedEventArgs e)
+    {
+        if (TotalPaws >= 100)
         {
-            if (TotalCookies >= FactoryPrice)
-            {
-                MachinesBought[2] = MachinesBought[2] + 1;
-                TotalCookies = TotalCookies - FactoryPrice;
-                double Price = FactoryPrice * 15 / 100;
-                FactoryPrice = FactoryPrice + Price;
-                txtSweetestHome.Text = Convert.ToString(Convert.ToInt32(FactoryPrice));
-            }
-        }
-
-        private void btnUpgrade1_Click(object sender, RoutedEventArgs e)
-        {
-            if (TotalCookies >= 100)
-            {
-                TotalCookies = TotalCookies - 100;
-                CookiesPs[0] = CookiesPs[0] * 2;
-                CookiesPerClick = CookiesPerClick * 2;
-                ((Button)sender).Visibility = Visibility.Hidden;
-            }
+            TotalPaws = TotalPaws - 100;
+            PawsPs[0] = PawsPs[0] * 2;
+            PawsPerSecond = PawsPerClick * 2;
+            ((Button)sender).Visibility = Visibility.Hidden;
         }
     }
 }
