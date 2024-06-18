@@ -1,7 +1,7 @@
-﻿using System.IO;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-namespace _4040;
+namespace lokfg;
 public partial class MainWindow
 {
     public double PawsPerClick = 1;
@@ -91,12 +91,12 @@ public partial class MainWindow
         }
     }
 
-    private void Cookie_Click(object sender, RoutedEventArgs e)
+    private void Paws_Click(object sender, RoutedEventArgs e)
     {
         TotalPaws = TotalPaws + PawsPerClick;
     }
 
-    private void btnClick_Click(object sender, RoutedEventArgs e)
+    private void btnPaws_Click(object sender, RoutedEventArgs e)
     {
         if (TotalPaws >= ClickPrice)
         {
@@ -108,7 +108,7 @@ public partial class MainWindow
         }
     }
 
-    private void btnGrandma_Click(object sender, RoutedEventArgs e)
+    private void btnSlumber_Click(object sender, RoutedEventArgs e)
     {
         if (TotalPaws >= SlumberPrice)
         {
@@ -120,7 +120,7 @@ public partial class MainWindow
         }
     }
 
-    private void btnFactory_Click(object sender, RoutedEventArgs e)
+    private void btnSweetestHome_Click(object sender, RoutedEventArgs e)
     {
         if (TotalPaws >= SlumberPrice)
         {
