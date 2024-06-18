@@ -1,11 +1,10 @@
-<Window x:Class="WPF_Cookie_Clicker.MainWindow"
+<Window x:Class="lokfg.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:WPF_Cookie_Clicker"
         mc:Ignorable="d"
-        Title="MainWindow" Height="400" Width="700" Closing="Window_Closing">
+        Title="MainWindow" Height="400" Width="700">
 
 
     <Grid>
@@ -17,8 +16,7 @@
         </Grid.ColumnDefinitions>
 
 
-        <Button x:Name="Maxwell" Content="Maxwell" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" Width="150" Height="150" RenderTransformOrigin="0,1" Click="Cookie_Click">
-        <Image VerticalAlignment="Center" HorizontalAlignment="Center" Width="210" Height="210" Source="pictures/Maxwell.png"></Image>
+        <Button x:Name="Maxwell" Content="Maxwell" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" Width="150" Height="150" RenderTransformOrigin="0,1" Click="Paws_Click">
             <Button.Resources>
                 <Style TargetType="Border">
                     <Setter Property="CornerRadius" Value="200"/>
@@ -60,15 +58,15 @@
             </StackPanel>
             <TextBlock Text="Clickers"/>
             <StackPanel Orientation="Horizontal" >
-                <Button x:Name="btnPaws" Content="Paws" MinWidth="180" Click="btnClick_Click"/>
+                <Button x:Name="btnPaws" Content="Paws" MinWidth="180" Click="btnPaws_Click"/>
                 <TextBlock x:Name="txtPaws" Text="15"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" >
-                <Button x:Name="btnSlumber" Content="Slumber" MinWidth="180" Click="btnGrandma_Click"/>
+                <Button x:Name="btnSlumber" Content="Slumber" MinWidth="180" Click="btnSlumber_Click"/>
                 <TextBlock x:Name="txtSlumber" Text="100" />
             </StackPanel>
             <StackPanel Orientation="Horizontal" >
-                <Button x:Name="btnSweetestHome" Content="Sweetest Home" MinWidth="180" Click="btnFactory_Click"/>
+                <Button x:Name="btnSweetestHome" Content="Sweetest Home" MinWidth="180" Click="btnSweetestHome_Click"/>
                 <TextBlock x:Name="txtSweetestHome" Text="1000" />
             </StackPanel>
         </StackPanel>
